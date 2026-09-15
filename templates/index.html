@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QWERTY Cipher</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 500px;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-top: 0;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            background-color: #2c2c2c;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 16px;
+            resize: none;
+            box-sizing: border-box;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .btn-encode { background-color: #4CAF50; color: white; }
+        .btn-encode:hover { background-color: #45a049; }
+        .btn-decode { background-color: #2196F3; color: white; }
+        .btn-decode:hover { background-color: #1e88e5; }
+        .result-box {
+            margin-top: 20px;
+            background-color: #2c2c2c;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>QWERTY Cipher</h1>
+    
+    <form method="POST">
+        <textarea name="user_input" placeholder="Enter your text here..." required>{{ original }}</textarea>
+        
+        <div class="buttons">
+            <button type="submit" name="action" value="encode" class="btn-encode">Encode</button>
+            <button type="submit" name="action" value="decode" class="btn-decode">Decode</button>
+        </div>
+    </form>
+
+    {% if result %}
+    <div class="result-box">
+        <strong>Result:</strong>
+        <p style="font-family: monospace;">{{ result }}</p>
+    </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
