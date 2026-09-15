@@ -7,8 +7,8 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #fffff;
-            color: #ffffff;
+            background-color: #f5f5f5; /* Light off-white background */
+            color: #333333; /* Dark text for readability */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -16,10 +16,10 @@
             margin: 0;
         }
         .container {
-            background-color: #d9d9d9;
+            background-color: #ffffff; /* Pure white container */
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1); /* Softer shadow for light theme */
             width: 100%;
             max-width: 500px;
         }
@@ -31,14 +31,17 @@
         textarea {
             width: 100%;
             height: 120px;
-            background-color: #2c2c2c;
-            color: #fff;
-            border: 1px solid #444;
+            background-color: #ffffff; /* White text area */
+            color: #333333; /* Dark text */
+            border: 1px solid #cccccc; /* Lighter border */
             border-radius: 8px;
             padding: 10px;
             font-size: 16px;
             resize: none;
             box-sizing: border-box;
+        }
+        textarea::placeholder {
+            color: #999999;
         }
         .buttons {
             display: flex;
@@ -62,15 +65,16 @@
         
         .result-box {
             margin-top: 20px;
-            background-color: #8a8787;
+            background-color: #fafafa; /* Bright white/gray */
+            color: #333333;
             padding: 15px;
             border-radius: 8px;
+            border: 1px solid #eeeeee;
             border-left: 4px solid #4CAF50;
             word-wrap: break-word;
             display: none; 
         }
         
-        /* New CSS for the top bar of the result box */
         .result-header {
             display: flex;
             justify-content: space-between;
@@ -78,16 +82,15 @@
             margin-bottom: 10px;
         }
         
-        /* New CSS for the copy button */
         .btn-copy {
-            background-color: #555;
-            color: white;
+            background-color: #e0e0e0; /* Lighter copy button */
+            color: #333333;
             padding: 6px 12px;
             font-size: 14px;
-            flex: none; /* Prevents the copy button from stretching */
+            flex: none; 
         }
         .btn-copy:hover {
-            background-color: #777;
+            background-color: #cccccc;
         }
     </style>
 </head>
@@ -99,11 +102,11 @@
     <textarea id="userInput" placeholder="Enter your text here..."></textarea>
     
     <div class="buttons">
-        <button onclick="handleAction('encode')" class="btn-encode">Encode</button>
+        <!-- Buttons swapped -->
         <button onclick="handleAction('decode')" class="btn-decode">Decode</button>
+        <button onclick="handleAction('encode')" class="btn-encode">Encode</button>
     </div>
 
-    <!-- Updated Result Box with Copy Button -->
     <div id="resultBox" class="result-box">
         <div class="result-header">
             <strong>Result:</strong>
@@ -176,24 +179,16 @@
             resultText.textContent = decodeQwerty(input);
         }
         
-        // Make the result box visible
         resultBox.style.display = 'block';
-        
-        // Reset copy button text just in case it still says "Copied!"
         copyBtn.textContent = 'Copy';
     }
 
-    // New JavaScript function to handle copying
     function copyToClipboard() {
         const resultText = document.getElementById('resultText').textContent;
         const copyBtn = document.getElementById('copyBtn');
         
-        // Uses the modern browser clipboard API
         navigator.clipboard.writeText(resultText).then(() => {
-            // Change button text to show it worked
             copyBtn.textContent = 'Copied!';
-            
-            // Change it back to 'Copy' after 2 seconds
             setTimeout(() => {
                 copyBtn.textContent = 'Copy';
             }, 2000);
