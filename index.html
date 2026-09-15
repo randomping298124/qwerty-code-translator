@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QWERTY Cipher</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 500px;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-top: 0;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            background-color: #2c2c2c;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 16px;
+            resize: none;
+            box-sizing: border-box;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .btn-encode { background-color: #4CAF50; color: white; }
+        .btn-encode:hover { background-color: #45a049; }
+        .btn-decode { background-color: #2196F3; color: white; }
+        .btn-decode:hover { background-color: #1e88e5; }
+        
+        .result-box {
+            margin-top: 20px;
+            background-color: #2c2c2c;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+            word-wrap: break-word;
+            display: none; 
+        }
+        
+        /* New CSS for the top bar of the result box */
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        /* New CSS for the copy button */
+        .btn-copy {
+            background-color: #555;
+            color: white;
+            padding: 6px 12px;
+            font-size: 14px;
+            flex: none; /* Prevents the copy button from stretching */
+        }
+        .btn-copy:hover {
+            background-color: #777;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>QWERTY Cipher</h1>
+    
+    <textarea id="userInput" placeholder="Enter your text here..."></textarea>
+    
+    <div class="buttons">
+        <button onclick="handleAction('encode')" class="btn-encode">Encode</button>
+        <button onclick="handleAction('decode')" class="btn-decode">Decode</button>
+    </div>
+
+    <!-- Updated Result Box with Copy Button -->
+    <div id="resultBox" class="result-box">
+        <div class="result-header">
+            <strong>Result:</strong>
+            <button onclick="copyToClipboard()" class="btn-copy" id="copyBtn">Copy</button>
+        </div>
+        <p id="resultText" style="font-family: monospace; margin: 0;"></p>
+    </div>
+</div>
+
+<script>
+    function isAlpha(char) {
+        return /^[a-z]$/i.test(char);
+    }
+
+    function encodeQwerty(plaintext) {
+        const qwertyLayout = "qwertyuiopasdfghjklzxcvbnm";
+        let encodedText = "";
+        
+        for (let char of plaintext.toLowerCase()) {
+            if (char === " ") {
+                encodedText += qwertyLayout;
+            } else if (qwertyLayout.includes(char)) {
+                encodedText += qwertyLayout.replace(char, "");
+            } else {
+                encodedText += char;
+            }
+        }
+        return encodedText;
+    }
+
+    function decodeQwerty(encodedText) {
+        const qwertyLayout = "qwertyuiopasdfghjklzxcvbnm";
+        let decodedText = "";
+        let i = 0;
+        
+        while (i < encodedText.length) {
+            if (!isAlpha(encodedText[i])) {
+                decodedText += encodedText[i];
+                i++;
+                continue;
+            }
+            
+            let j = 0;
+            let missingChar = " ";
+            
+            while (j < 26) {
+                if (i < encodedText.length && isAlpha(encodedText[i]) && encodedText[i].toLowerCase() === qwertyLayout[j]) {
+                    i++;
+                } else {
+                    missingChar = qwertyLayout[j];
+                }
+                j++;
+            }
+            decodedText += missingChar;
+        }
+        return decodedText;
+    }
+
+    function handleAction(action) {
+        const input = document.getElementById('userInput').value;
+        const resultBox = document.getElementById('resultBox');
+        const resultText = document.getElementById('resultText');
+        const copyBtn = document.getElementById('copyBtn');
+        
+        if (!input) return;
+
+        if (action === 'encode') {
+            resultText.textContent = encodeQwerty(input);
+        } else {
+            resultText.textContent = decodeQwerty(input);
+        }
+        
+        // Make the result box visible
+        resultBox.style.display = 'block';
+        
+        // Reset copy button text just in case it still says "Copied!"
+        copyBtn.textContent = 'Copy';
+    }
+
+    // New JavaScript function to handle copying
+    function copyToClipboard() {
+        const resultText = document.getElementById('resultText').textContent;
+        const copyBtn = document.getElementById('copyBtn');
+        
+        // Uses the modern browser clipboard API
+        navigator.clipboard.writeText(resultText).then(() => {
+            // Change button text to show it worked
+            copyBtn.textContent = 'Copied!';
+            
+            // Change it back to 'Copy' after 2 seconds
+            setTimeout(() => {
+                copyBtn.textContent = 'Copy';
+            }, 2000);
+        });
+    }
+</script>
+
+</body>
+</html>
